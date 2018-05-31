@@ -38,9 +38,8 @@ class KubeFormSpawner(KubeSpawner):
     <br/><br/>
 
     <label for='extra_resource_limits'>Extra Resource Limits</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <input name='extra_resource_limits' placeholder='{&quot;nvidia.com/gpu&quot;: 3}'></input>
-    <br/><br/>
-    '''.format(registry)
+    <input name='extra_resource_limits' placeholder='{{&quot;nvidia.com/gpu&quot;: 3}}'></input>
+    <br/><br/>'''.format(registry)
 
     def options_from_form(self, formdata):
         options = {}
