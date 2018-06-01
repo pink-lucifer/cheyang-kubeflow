@@ -5,7 +5,7 @@
     $.parts(params.namespace, params.tfAmbassadorImage).role,
     $.parts(params.namespace, params.tfAmbassadorImage).serviceAccount,
     $.parts(params.namespace, params.tfAmbassadorImage).roleBinding,
-    $.parts(params.namespace, params.tfAmbassadorImage).deploy,
+    $.parts(params.namespace, params.tfAmbassadorImage).deploy(params.tfStatsdImage),
     $.parts(params.namespace, params.tfAmbassadorImage).k8sDashboard(params.cloud),
   ],
 
@@ -144,7 +144,7 @@
       ],
     },  // roleBinding
 
-    deploy:: {
+    deploy(statsdImage):: {
       apiVersion: "extensions/v1beta1",
       kind: "Deployment",
       metadata: {
@@ -207,7 +207,7 @@
                 },
               },
               {
-                image: "quay.io/datawire/statsd:0.30.1",
+                image: statsdImage,
                 name: "statsd",
               },
             ],
