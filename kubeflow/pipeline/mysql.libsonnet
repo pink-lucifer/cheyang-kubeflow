@@ -1,10 +1,20 @@
 {
+<<<<<<< HEAD
   all(namespace, mysqlImage):: [
     $.parts(namespace).pvc,
     $.parts(namespace).service,
     $.parts(namespace).deploy(mysqlImage),
   ],
   parts(namespace):: {
+=======
+  parts(namespace):: {
+    all:: [
+      $.parts(namespace).pvc,
+      $.parts(namespace).service,
+      $.parts(namespace).deploy,
+    ],
+
+>>>>>>> upstream/v0.3-branch
     pvc: {
       apiVersion: "v1",
       kind: "PersistentVolumeClaim",
@@ -46,7 +56,11 @@
       },
     },  //service
 
+<<<<<<< HEAD
     deploy(image): {
+=======
+    deploy: {
+>>>>>>> upstream/v0.3-branch
       apiVersion: "apps/v1beta2",
       kind: "Deployment",
       metadata: {
@@ -71,7 +85,11 @@
           spec: {
             containers: [
               {
+<<<<<<< HEAD
                 image: image,
+=======
+                image: "mysql:5.6",
+>>>>>>> upstream/v0.3-branch
                 name: "mysql",
                 env: [
                   {

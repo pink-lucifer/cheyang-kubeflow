@@ -13,9 +13,12 @@
     $.parts(params, namespace).coreRestDeployment,
     $.parts(params, namespace).uiService,
     $.parts(params, namespace).uiDeployment,
+<<<<<<< HEAD
     $.parts(params, namespace).uiClusterRole,
     $.parts(params, namespace).uiClusterRoleBinding,
     $.parts(params, namespace).uiServiceAccount,
+=======
+>>>>>>> upstream/v0.3-branch
   ],
 
   parts(params, namespace):: {
@@ -220,9 +223,16 @@
       kind: "PersistentVolumeClaim",
       metadata: {
         labels: {
+<<<<<<< HEAD
           app: "katib",
         },
         name: "katib-mysql",
+=======
+          app: "vizier",
+          component: "db",
+        },
+        name: "vizier-db",
+>>>>>>> upstream/v0.3-branch
         namespace: namespace,
       },
       spec: {
@@ -282,6 +292,22 @@
                     value: "vizier",
                   },
                 ],
+<<<<<<< HEAD
+=======
+                image: params.vizierDbImage,
+                name: "vizier-db",
+                // If we mount block device with ext4 fs as pvc, default data dir has lost+found dir in, and mysql fails to init
+                args: [
+                  "--datadir",
+                  "/var/lib/mysql/datadir",
+                ],
+                volumeMounts: [
+                  {
+                    name: "vizier-db",
+                    mountPath: "/var/lib/mysql",
+                  },
+                ],
+>>>>>>> upstream/v0.3-branch
                 ports: [
                   {
                     name: "dbapi",
@@ -314,9 +340,15 @@
             ],
             volumes: [
               {
+<<<<<<< HEAD
                 name: "katib-mysql",
                 persistentVolumeClaim: {
                   claimName: "katib-mysql",
+=======
+                name: "vizier-db",
+                persistentVolumeClaim: {
+                  claimName: "vizier-db",
+>>>>>>> upstream/v0.3-branch
                 },
               },
             ],
@@ -352,6 +384,7 @@
       },
     },  // dbService
 
+<<<<<<< HEAD
     dbSecret: {
       apiVersion: "v1",
       kind: "Secret",
@@ -365,6 +398,8 @@
       },
     },  // dbSecret
 
+=======
+>>>>>>> upstream/v0.3-branch
     coreRestService: {
       apiVersion: "v1",
       kind: "Service",
@@ -416,7 +451,11 @@
           spec: {
             containers: [
               {
+<<<<<<< HEAD
                 command: [
+=======
+                args: [
+>>>>>>> upstream/v0.3-branch
                   "./vizier-manager-rest",
                 ],
                 image: params.vizierCoreRestImage,
@@ -445,6 +484,7 @@
         },
         name: "katib-ui",
         namespace: namespace,
+<<<<<<< HEAD
         annotations: {
           "getambassador.io/config":
             std.join("\n", [
@@ -457,6 +497,8 @@
               "service: katib-ui." + namespace,
             ]),
         },  //annotations
+=======
+>>>>>>> upstream/v0.3-branch
       },
       spec: {
         ports: [
@@ -496,10 +538,16 @@
             name: "katib-ui",
           },
           spec: {
+<<<<<<< HEAD
             serviceAccountName: "katib-ui",
             containers: [
               {
                 command: [
+=======
+            containers: [
+              {
+                args: [
+>>>>>>> upstream/v0.3-branch
                   "./katib-ui",
                 ],
                 image: params.katibUIImage,
@@ -516,6 +564,7 @@
         },
       },
     },  // uiDeployment
+<<<<<<< HEAD
 
     uiClusterRole: {
       apiVersion: "rbac.authorization.k8s.io/v1",
@@ -577,5 +626,7 @@
         namespace: namespace,
       },
     },  // uiServiceAccount
+=======
+>>>>>>> upstream/v0.3-branch
   },  //parts
 }

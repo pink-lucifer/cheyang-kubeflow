@@ -1,6 +1,10 @@
 {
   local k = import "k.libsonnet",
+<<<<<<< HEAD
   local util = import "kubeflow/common/util.libsonnet",
+=======
+  local util = import "kubeflow/core/util.libsonnet",
+>>>>>>> upstream/v0.3-branch
   local deployment = k.apps.v1beta1.deployment,
   // super resolves to any object which has a params field.
   local params = super.params,

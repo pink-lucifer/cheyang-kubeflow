@@ -14,7 +14,11 @@
 // @optionalParam s3AwsRegion string us-west-1 S3 region
 // @optionalParam s3UseHttps string true Whether or not to use https
 // @optionalParam s3VerifySsl string true Whether or not to verify https certificates for S3 connections
+<<<<<<< HEAD
 // @optionalParam s3Endpoint string s3.us-west-1.amazonaws.com URL for your s3-compatible endpoint
+=======
+// @optionalParam s3Endpoint string http://s3.us-west-1.amazonaws.com URL for your s3-compatible endpoint
+>>>>>>> upstream/v0.3-branch
 
 local subtype = import "kubeflow/tensorboard/aws.libsonnet";
 local basetype = import "kubeflow/tensorboard/tensorboard.libsonnet";

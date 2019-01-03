@@ -1,6 +1,10 @@
 {
   local k = import "k.libsonnet",
+<<<<<<< HEAD
   local util = import "kubeflow/common/util.libsonnet",
+=======
+  local util = import "kubeflow/core/util.libsonnet",
+>>>>>>> upstream/v0.3-branch
   local deployment = k.apps.v1beta1.deployment,
   // super resolves to any object which has a params field.
   local params = super.params,
@@ -37,6 +41,13 @@
               value: params.s3AwsRegion,
             },
             {
+<<<<<<< HEAD
+=======
+              name: "S3_REGION",
+              value: params.s3AwsRegion,
+            },
+            {
+>>>>>>> upstream/v0.3-branch
               name: "S3_USE_HTTPS",
               value: params.s3UseHttps,
             },

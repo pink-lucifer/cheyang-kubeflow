@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   all(namespace, minioImage):: [
     $.parts(namespace).pvc,
     $.parts(namespace).service,
@@ -7,6 +8,16 @@
   ],
 
   parts(namespace):: {
+=======
+  parts(namespace):: {
+    all:: [
+      $.parts(namespace).pvc,
+      $.parts(namespace).service,
+      $.parts(namespace).deploy,
+      $.parts(namespace).secret,
+    ],
+
+>>>>>>> upstream/v0.3-branch
     pvc: {
       apiVersion: "v1",
       kind: "PersistentVolumeClaim",
@@ -50,7 +61,11 @@
       },
     },  //service
 
+<<<<<<< HEAD
     deploy(image): {
+=======
+    deploy: {
+>>>>>>> upstream/v0.3-branch
       apiVersion: "apps/v1beta1",
       kind: "Deployment",
       metadata: {
@@ -85,7 +100,11 @@
                     mountPath: "/data",
                   },
                 ],
+<<<<<<< HEAD
                 image: image,
+=======
+                image: "minio/minio:RELEASE.2018-02-09T22-40-05Z",
+>>>>>>> upstream/v0.3-branch
                 args: [
                   "server",
                   "/data",

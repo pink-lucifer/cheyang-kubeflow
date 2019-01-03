@@ -22,6 +22,7 @@ EOF
 gcpInitProject() {
   # Enable GCloud APIs
   gcloud services enable deploymentmanager.googleapis.com \
+<<<<<<< HEAD
     servicemanagement.googleapis.com \
     container.googleapis.com \
     cloudresourcemanager.googleapis.com \
@@ -30,6 +31,20 @@ gcpInitProject() {
     ml.googleapis.com \
     iam.googleapis.com \
     sqladmin.googleapis.com --project=${PROJECT}
+=======
+                         servicemanagement.googleapis.com \
+                         container.googleapis.com \
+                         cloudresourcemanager.googleapis.com \
+                         endpoints.googleapis.com \
+                         file.googleapis.com \
+                         ml.googleapis.com \
+                         iam.googleapis.com --project=${PROJECT}
+
+  # Set IAM Admin Policy
+  gcloud projects add-iam-policy-binding ${PROJECT} \
+     --member serviceAccount:${PROJECT_NUMBER}@cloudservices.gserviceaccount.com \
+     --role roles/resourcemanager.projectIamAdmin
+>>>>>>> upstream/v0.3-branch
 }
 
 generateDMConfigs() {
@@ -56,7 +71,11 @@ generateDMConfigs() {
 
     # Set values in DM config file
     sed -i.bak "s/zone: SET_THE_ZONE/zone: ${ZONE}/" "${KUBEFLOW_DM_DIR}/${CONFIG_FILE}"
+<<<<<<< HEAD
     sed -i.bak "s/gkeApiVersion: SET_GKE_API_VERSION/gkeApiVersion: ${GKE_API_VERSION}/" "${KUBEFLOW_DM_DIR}/${CONFIG_FILE}"
+=======
+    sed -i.bak "s/cluster-version: SET_CLUSTER_VERSION/cluster-version: ${CLUSTER_VERSION}/" "${KUBEFLOW_DM_DIR}/${CONFIG_FILE}"
+>>>>>>> upstream/v0.3-branch
     sed -i.bak "s/users:/users: [\"${IAP_IAM_ENTRY}\"]/" "${KUBEFLOW_DM_DIR}/${CONFIG_FILE}"
     sed -i.bak "s/ipName: kubeflow-ip/ipName: ${KUBEFLOW_IP_NAME}/" "${KUBEFLOW_DM_DIR}/${CONFIG_FILE}"
     rm "${KUBEFLOW_DM_DIR}/${CONFIG_FILE}.bak"
@@ -112,7 +131,11 @@ updateDeployment() {
   cd ${KUBEFLOW_DM_DIR}
   # Check if it already exists
   set +e
+<<<<<<< HEAD
   O=$(gcloud deployment-manager --project=${PROJECT} deployments describe ${NAME} 2>&1)
+=======
+  O=`gcloud deployment-manager --project=${PROJECT} deployments describe ${NAME} 2>&1`
+>>>>>>> upstream/v0.3-branch
   exists=$?
   set -e
 

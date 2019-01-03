@@ -30,8 +30,13 @@ checkIAP() {
 }
 
 # Activate the service account
+<<<<<<< HEAD:kubeflow/gcp/configure_envoy_for_iap.sh
 for i in $(seq 1 10); do
   gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS} && break || sleep 10
+=======
+for i in $(seq 1 10)
+do gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS} && break || sleep 10
+>>>>>>> upstream/v0.3-branch:kubeflow/core/configure_envoy_for_iap.sh
 done
 
 # Print out the config for debugging

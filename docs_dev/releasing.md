@@ -313,6 +313,7 @@ the correct Docker image. See sections below for component specific instructions
      * IMAGE_PATTERN should be a regex matching the images that you want to add the tag
    * Create a PR checking **into master** the changes in image_tags.yaml
 
+<<<<<<< HEAD
 1. Update ksonnet components using the `update_components` script. For example, to update `tf-operator` to `v0.3.2`:
    ```
    COMPONENT=tf-operator
@@ -321,6 +322,49 @@ the correct Docker image. See sections below for component specific instructions
    ```
    Currently the script supports tf-operator, pytorch-operator, katib, jupyter-notebooks, and centraldashboard.
 
+=======
+### Katib
+
+1. Identify the tag of the Katib images to use
+
+   * Katib images should be pushed for each postsubmit
+
+1. Modify the script update_katib_ksonnet.sh 
+
+    * set RELEASE to the tag you want to use
+
+1. Run `update_katib_ksonnet.sh`
+
+1. Submit a PR with the modified changes to the prototype.
+
+### TFJob Operator
+
+1. Identify the docker image in [gcr.io/kubeflow-images-public/tf_operator](https://gcr.io/kubeflow-images-public/tf_operator)
+
+   * Docker images are pushed by kubeflow/tf-operator postsubmit jobs
+   * You should pick an image corresponding to a green postsubmit at the desired
+     commit
+
+1. Update the entry for **gcr.io/kubeflow-images-public/tf_operator** in [image_tags.yaml](https://github.com/kubeflow/kubeflow/blob/master/releasing/image_tags.yaml#L288)
+
+    * Add a version that specifies the sha of the image you want to use and the release
+      tag you want to add e.g. "vX.Y.Z"
+
+    ```
+
+    ```
+1. Run the following command to apply the new image tag
+
+   ```
+   releasing/run_apply_image_tags.sh .*tf_operator.*:vX.Y.Z
+   ```
+
+   * The command needs to be run by someone with write permissions on 
+     gcr.io/kubeflow-images-public
+
+   * Typically this will be the release czar but you can also consult 
+     [kubeflow-images-public.iam.policy.yaml](https://github.com/kubeflow/testing/blob/master/release-infra/kubeflow-images-public.iam.policy.yaml)
+>>>>>>> upstream/v0.3-branch
 
 ### Release branching policy
 

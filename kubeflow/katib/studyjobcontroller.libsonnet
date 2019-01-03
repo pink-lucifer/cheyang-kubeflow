@@ -16,7 +16,10 @@
       },
       spec: {
         group: "kubeflow.org",
+<<<<<<< HEAD
         scope: "Namespaced",
+=======
+>>>>>>> upstream/v0.3-branch
         version: "v1alpha1",
         names: {
           kind: "StudyJob",
@@ -73,6 +76,10 @@
         apiVersion: "rbac.authorization.k8s.io/v1",
         metadata: {
           name: "metrics-collector",
+<<<<<<< HEAD
+=======
+          namespace: namespace,
+>>>>>>> upstream/v0.3-branch
         },
         roleRef: {
           apiGroup: "rbac.authorization.k8s.io",
@@ -105,7 +112,11 @@
               namespace: {{.NameSpace}}  
             spec:
               schedule: "*/1 * * * *"
+<<<<<<< HEAD
               successfulJobsHistoryLimit: 0
+=======
+              successfulJobsHistoryLimit: 1
+>>>>>>> upstream/v0.3-branch
               failedJobsHistoryLimit: 1
               jobTemplate:
                 spec:
@@ -123,8 +134,11 @@
                         - "{{.TrialID}}"
                         - "-w"
                         - "{{.WorkerID}}"
+<<<<<<< HEAD
                         - "-k"
                         - "{{.WorkerKind}}"
+=======
+>>>>>>> upstream/v0.3-branch
                         - "-n"
                         - "{{.NameSpace}}"
                       restartPolicy: Never
@@ -149,7 +163,14 @@
               "serviceaccounts",
             ],
             verbs: [
+<<<<<<< HEAD
               "*",
+=======
+              "create",
+              "update",
+              "list",
+              "watch",
+>>>>>>> upstream/v0.3-branch
             ],
           },
           {
@@ -187,6 +208,7 @@
               "*",
             ],
           },
+<<<<<<< HEAD
           {
             apiGroups: [
               "kubeflow.org",
@@ -212,6 +234,8 @@
               "*",
             ],
           },
+=======
+>>>>>>> upstream/v0.3-branch
         ],
       },
       {
@@ -227,6 +251,10 @@
         apiVersion: "rbac.authorization.k8s.io/v1",
         metadata: {
           name: "studyjob-controller",
+<<<<<<< HEAD
+=======
+          namespace: namespace,
+>>>>>>> upstream/v0.3-branch
         },
         roleRef: {
           apiGroup: "rbac.authorization.k8s.io",
@@ -273,6 +301,33 @@
                   name: "studyjob-controller",
                   image: params.studyJobControllerImage,
                   imagePullPolicy: "Always",
+<<<<<<< HEAD
+=======
+                  volumeMounts: [
+                    {
+                      name: "worker-template",
+                      mountPath: "/worker-template",
+                    },
+                    {
+                      name: "metricscollector-template",
+                      mountPath: "/metricscollector-template",
+                    },
+                  ],
+                },
+              ],
+              volumes: [
+                {
+                  name: "worker-template",
+                  configMap: {
+                    name: "worker-template",
+                  },
+                },
+                {
+                  name: "metricscollector-template",
+                  configMap: {
+                    name: "metricscollector-template",
+                  },
+>>>>>>> upstream/v0.3-branch
                 },
               ],
             },

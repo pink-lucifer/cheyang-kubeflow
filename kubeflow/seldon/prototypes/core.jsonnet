@@ -9,7 +9,10 @@
 // @optionalParam apifeServiceType string NodePort API Front End Service Type
 // @optionalParam operatorSpringOpts string null cluster manager spring opts
 // @optionalParam operatorJavaOpts string null cluster manager java opts
+<<<<<<< HEAD
 // @optionalParam grpcMaxMessageSize string 4194304 Max gRPC message size
+=======
+>>>>>>> upstream/v0.3-branch
 // @optionalParam seldonVersion string 0.2.3 Seldon version
 
 local k = import "k.libsonnet";

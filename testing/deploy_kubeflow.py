@@ -70,7 +70,11 @@ def deploy_kubeflow(test_case):
 
   util.run(
     [
+<<<<<<< HEAD
       "ks", "generate", "jupyter", "jupyter",
+=======
+      "ks", "generate", "jupyterhub", "jupyterhub",
+>>>>>>> upstream/v0.3-branch
     ],
     cwd=app_dir)
 

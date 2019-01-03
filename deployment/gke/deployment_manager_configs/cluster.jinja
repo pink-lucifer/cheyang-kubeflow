@@ -17,7 +17,17 @@ limitations under the License.
 {% set SQL_INSTANCE_NAME =  env['deployment'] + '-mysql' %}
 {% set CPU_POOL = NAME_PREFIX + '-cpu-pool-' + properties['pool-version'] %}
 {% set GPU_POOL = NAME_PREFIX + '-gpu-pool-' + properties['pool-version'] %}
+<<<<<<< HEAD:deployment/gke/deployment_manager_configs/cluster.jinja
 {% set VM_OAUTH_SCOPES = ['https://www.googleapis.com/auth/logging.write', 
+=======
+
+{# Type names are the names to give to deployment manager type providers
+   that will be created to represent Kubernetes objects.
+   There is type corresponding to each API endpoint.
+#}
+
+{% set VM_OAUTH_SCOPES = ['https://www.googleapis.com/auth/logging.write',
+>>>>>>> upstream/v0.3-branch:scripts/gke/deployment_manager_configs/cluster.jinja
                           'https://www.googleapis.com/auth/monitoring',
                           'https://www.googleapis.com/auth/devstorage.read_only'] %}
 
@@ -60,7 +70,14 @@ resources:
     zone: {{ properties['zone'] }}
     cluster:
       name: {{ CLUSTER_NAME }}
+<<<<<<< HEAD:deployment/gke/deployment_manager_configs/cluster.jinja
       initialClusterVersion: "{{ properties['cluster-version'] }}"
+=======
+      initialClusterVersion: {{ properties['cluster-version'] }}
+      # We need 1.10.2 to support Stackdrivier GKE.
+      # loggingService: none
+      # monitoringService: none
+>>>>>>> upstream/v0.3-branch:scripts/gke/deployment_manager_configs/cluster.jinja
       {% if properties['gkeApiVersion'] == 'v1beta1' %}
       # We need 1.10.2 to support Stackdriver GKE.
       loggingService: logging.googleapis.com/kubernetes

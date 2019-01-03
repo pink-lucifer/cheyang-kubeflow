@@ -28,7 +28,10 @@ bindings:
   - roles/dataflow.admin
   - roles/ml.admin
   - roles/dataproc.editor
+<<<<<<< HEAD:deployment/gke/deployment_manager_configs/iam_bindings_template.yaml
   - roles/cloudsql.admin
+=======
+>>>>>>> upstream/v0.3-branch:scripts/gke/deployment_manager_configs/iam_bindings_template.yaml
 - members:
   - set-kubeflow-vm-service-account
   roles:

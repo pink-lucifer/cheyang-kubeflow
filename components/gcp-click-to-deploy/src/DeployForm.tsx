@@ -590,6 +590,34 @@ export default class DeployForm extends React.Component<any, DeployFormState> {
     );
   }
 
+<<<<<<< HEAD
+=======
+  /**
+   * Returns a list of services that are needed but not enabled for the given project.
+   */
+  private async _getServicesToEnable(project: string) {
+    const enabledServices = await Gapi.servicemanagement.list(project);
+
+    const servicesToEnable = new Set([
+      'deploymentmanager.googleapis.com',
+      'container.googleapis.com',
+      'cloudresourcemanager.googleapis.com',
+      'endpoints.googleapis.com',
+      'iam.googleapis.com',
+      'sourcerepo.googleapis.com',
+      'ml.googleapis.com',
+    ]);
+
+    for (const k of Array.from(servicesToEnable.keys())) {
+      if (enabledServices!.services!.find(s => s.serviceName === k)) {
+        servicesToEnable.delete(k);
+      }
+    }
+
+    return Array.from(servicesToEnable);
+  }
+
+>>>>>>> upstream/v0.3-branch
   private _monitorDeployment(project: string, deploymentName: string) {
     const dashboardUri = 'https://' + this.state.deploymentName + '.endpoints.' + this.state.project + '.cloud.goog/';
     const monitorInterval = setInterval(() => {

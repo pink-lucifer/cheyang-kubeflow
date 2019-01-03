@@ -210,7 +210,11 @@
             "-m",
             "py.simple_tfjob_tests",
             "--app_dir=" + tests.tfOperatorRoot + "/test/workflows",
+<<<<<<< HEAD
             "--tfjob_version=v1beta1",
+=======
+            "--tfjob_version=v1alpha2",
+>>>>>>> upstream/v0.3-branch
             // Name is used for the test case name so it should be unique across
             // all E2E tests.
             "--params=name=smoke-tfjob-" + tests.platform + ",namespace=" + tests.stepsNamespace,
@@ -664,7 +668,11 @@
               "--zone=" + zone,
               "--project=" + project,
               "--app_dir=" + tfOperatorRoot + "/test/workflows",
+<<<<<<< HEAD
               "--tfjob_version=v1beta1",
+=======
+              "--tfjob_version=v1alpha2",
+>>>>>>> upstream/v0.3-branch
               // Name is used for the test case name so it should be unique across
               // all E2E tests.
               "--params=name=simple-tfjob-" + platform + ",namespace=" + stepsNamespace,

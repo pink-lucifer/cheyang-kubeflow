@@ -20,8 +20,13 @@
       zone: "us-east1-d",
     },
     centraldashboard: {
+<<<<<<< HEAD
       bucket: "kubeflow-ci_temp",
       cluster: "kubeflow-testing",
+=======
+      bucket: "kubeflow-releasing-artifacts",
+      cluster: "kubeflow-releasing",
+>>>>>>> upstream/v0.3-branch
       dockerfile: "Dockerfile",
       dockerfileDir: "kubeflow/kubeflow/components/centraldashboard",
       extra_args: "null",
@@ -29,12 +34,21 @@
       gcpCredentialsSecretName: "gcp-credentials",
       image: "centraldashboard",
       name: "centraldashboard",
+<<<<<<< HEAD
       namespace: "kubeflow-ci",
       nfsVolumeClaim: "nfs-external",
       project: "kubeflow-ci",
       prow_env: "REPO_OWNER=kubeflow,REPO_NAME=kubeflow,PULL_BASE_SHA=master",
       registry: "gcr.io/kubeflow-images-public",
       testing_image: "gcr.io/kubeflow-ci/test-worker:latest",
+=======
+      namespace: "kubeflow-releasing",
+      nfsVolumeClaim: "nfs-external",
+      project: "kubeflow-releasing",
+      prow_env: "REPO_OWNER=kubeflow,REPO_NAME=kubeflow,PULL_BASE_SHA=master",
+      registry: "gcr.io/kubeflow-images-public",
+      testing_image: "gcr.io/kubeflow-releasing/worker:latest",
+>>>>>>> upstream/v0.3-branch
       versionTag: "latest",
       zone: "us-central1-a",
     },

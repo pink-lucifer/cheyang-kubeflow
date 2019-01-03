@@ -165,6 +165,13 @@ def deploy_model(args):
   app_dir = setup_kubeflow_ks_app(args, api_client)
 
   logging.info("Deploying tf-serving.")
+<<<<<<< HEAD
+=======
+  generate_command = ["ks", "generate", "tf-serving-gcp", component]
+
+  util.run(generate_command, cwd=app_dir)
+
+>>>>>>> upstream/v0.3-branch
   params = {}
   for pair in args.params.split(","):
     k, v = pair.split("=", 1)

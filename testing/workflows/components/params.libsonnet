@@ -50,5 +50,11 @@
       prow_env: "REPO_OWNER=kubeflow,REPO_NAME=kubeflow,PULL_BASE_SHA=master",
       gkeApiVersion: "",
     },
+    tfserving: {
+      commit: "master",
+      name: "somefakename",
+      namespace: "kubeflow-test-infra",
+      prow_env: "REPO_OWNER=kubeflow,REPO_NAME=kubeflow,PULL_BASE_SHA=master",
+    },
   },
 }

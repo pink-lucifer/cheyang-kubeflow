@@ -1,4 +1,5 @@
 // @apiVersion 0.1
+<<<<<<< HEAD
 // @name io.ksonnet.pkg.tf-serving-deployment-gcp
 // @description TensorFlow serving
 // @shortDescription A TensorFlow serving deployment
@@ -14,6 +15,22 @@
 // @optionalParam gcpCredentialSecretName string null If not empty, insert the secret credential
 // @optionalParam injectIstio string false Whether to inject istio sidecar; should be true or false.
 // @optionalParam enablePrometheus string true Whether to enable prometheus endpoint (requires TF 1.11)
+=======
+// @name io.ksonnet.pkg.tf-serving-gcp
+// @description TensorFlow serving
+// @shortDescription A TensorFlow serving deployment
+// @param name string Name to give to each of the components
+// @optionalParam namespace string kubeflow The namespace
+// @optionalParam serviceType string ClusterIP The k8s service type for tf serving.
+// @optionalParam numGpus string 0 Number of gpus to use
+// @optionalParam deployHttpProxy string false Whether to deploy http proxy
+// @optionalParam modelBasePath string gs://kubeflow-examples-data/mnist The model path
+// @optionalParam modelName string mnist The model name
+// @optionalParam defaultCpuImage string tensorflow/serving:1.8.0 The default model server image (cpu)
+// @optionalParam defaultGpuImage string tensorflow/serving:1.10.0-gpu The default model server image (gpu)
+// @optionalParam httpProxyImage string gcr.io/kubeflow-images-public/tf-model-server-http-proxy:v20180723 Http proxy image
+// @optionalParam gcpCredentialSecretName string null If not empty, insert the secret credential
+>>>>>>> upstream/v0.3-branch
 
 local k = import "k.libsonnet";
 local deployment = k.apps.v1beta1.deployment;
@@ -41,7 +58,11 @@ local tfDeployment = base.tfDeployment +
                              if params.gcpCredentialSecretName != "null" then (
                                [{
                                  name: "GOOGLE_APPLICATION_CREDENTIALS",
+<<<<<<< HEAD
                                  value: "/secret/gcp-credentials/user-gcp-sa.json",
+=======
+                                 value: "/secret/gcp-credentials/key.json",
+>>>>>>> upstream/v0.3-branch
                                }]
                              ) else [],
                            ) +
@@ -57,5 +78,9 @@ local tfDeployment = base.tfDeployment +
                      );
 util.list([
   tfDeployment,
+<<<<<<< HEAD
   base.tfservingConfig,
+=======
+  base.tfService,
+>>>>>>> upstream/v0.3-branch
 ],)

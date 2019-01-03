@@ -15,10 +15,15 @@
     local scheduledWorkflowImage = params.scheduledWorkflowImage,
     local persistenceAgentImage = params.persistenceAgentImage,
     local uiImage = params.uiImage,
+<<<<<<< HEAD
     local mysqlImage = params.mysqlImage,
     local minioImage = params.minioImage,
     all:: minio.all(namespace, minioImage) +
           mysql.all(namespace, mysqlImage) +
+=======
+    all:: minio.parts(namespace).all +
+          mysql.parts(namespace).all +
+>>>>>>> upstream/v0.3-branch
           pipeline_apiserver.all(namespace, apiImage) +
           pipeline_scheduledworkflow.all(namespace, scheduledWorkflowImage) +
           pipeline_persistenceagent.all(namespace, persistenceAgentImage) +

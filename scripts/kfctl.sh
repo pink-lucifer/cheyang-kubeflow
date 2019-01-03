@@ -19,7 +19,14 @@ SKIP_INIT_PROJECT=false
 # logging agents.
 GKE_API_VERSION="v1beta1"
 
+<<<<<<< HEAD
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
+=======
+SKIP_INIT_PROJECT=false
+MIN_CLUSTER_VERSION="1.10.7-gke.2"
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+>>>>>>> upstream/v0.3-branch
 source "${DIR}/util.sh"
 source "${DIR}/gke/util.sh"
 source "${DIR}/util-minikube.sh"
@@ -30,7 +37,11 @@ createEnv() {
   # this ensures all relevant environment variables are persisted in
   # a file for consistency across runs.
   echo PLATFORM=${PLATFORM} >> ${ENV_FILE}
+<<<<<<< HEAD
   DEFAULT_KUBEFLOW_REPO="$(cd "${DIR}/.." > /dev/null && pwd)"
+=======
+  DEFAULT_KUBEFLOW_REPO="$( cd "${DIR}/.." >/dev/null && pwd )"
+>>>>>>> upstream/v0.3-branch
   # Remove trailing slash from the repo.
   KUBEFLOW_REPO=${KUBEFLOW_REPO%/}
   echo KUBEFLOW_REPO=${KUBEFLOW_REPO:-"${DEFAULT_KUBEFLOW_REPO}"} >> ${ENV_FILE}
@@ -57,12 +68,19 @@ createEnv() {
     gcp)
       echo KUBEFLOW_PLATFORM=gke >> ${ENV_FILE}
       echo PROJECT="${PROJECT}" >> ${ENV_FILE}
+<<<<<<< HEAD
       echo ZONE=${ZONE} >> ${ENV_FILE}
       echo EMAIL=${EMAIL} >> ${ENV_FILE}
 
       # TODO: Do we need to make PROJECT_NUMBER also a flag like --project-number
       if [ -z "${PROJECT_NUMBER}" ]; then
         PROJECT_NUMBER=$(gcloud projects describe ${PROJECT} --format='value(project_number)')
+=======
+      if [ -z "${PROJECT}" ]; then
+        echo PROJECT must be set either using environment variable PROJECT
+        echo or by setting the default project in gcloud
+        exit 1
+>>>>>>> upstream/v0.3-branch
       fi
 
       # Name of the deployment
@@ -75,7 +93,21 @@ createEnv() {
       echo KUBEFLOW_K8S_MANIFESTS_DIR="$(pwd)/k8s_specs" >> ${ENV_FILE}
 
       # Name of the K8s context to create.
+<<<<<<< HEAD
       echo KUBEFLOW_K8S_CONTEXT=${DEPLOYMENT_NAME} >> ${ENV_FILE}
+=======
+      echo  KUBEFLOW_K8S_CONTEXT=${DEPLOYMENT_NAME} >> ${ENV_FILE}
+
+      # GCP Zone
+      # The default should be a zone that supports Haswell.
+      ZONE=${ZONE:-$(gcloud config get-value compute/zone 2>/dev/null)}
+      ZONE=${ZONE:-"us-east1-d"} 
+      echo ZONE=${ZONE} >> ${ENV_FILE}
+
+      # Email for cert manager
+      EMAIL=${EMAIL:-$(gcloud config get-value account 2>/dev/null)}
+      echo EMAIL=${EMAIL} >> ${ENV_FILE}
+>>>>>>> upstream/v0.3-branch
 
       # GCP Static IP Name
       echo KUBEFLOW_IP_NAME=${KUBEFLOW_IP_NAME:-"${DEPLOYMENT_NAME}-ip"} >> ${ENV_FILE}
@@ -87,9 +119,31 @@ createEnv() {
 
       echo CONFIG_FILE=${CONFIG_FILE:-"cluster-kubeflow.yaml"} >> ${ENV_FILE}
 
+<<<<<<< HEAD
       echo PROJECT_NUMBER=${PROJECT_NUMBER} >> ${ENV_FILE}
 
       echo GKE_API_VERSION=${GKE_API_VERSION} >> ${ENV_FILE}
+=======
+      if [ -z "${PROJECT_NUMBER}" ]; then
+        PROJECT_NUMBER=$(gcloud projects describe ${PROJECT} --format='value(project_number)')
+      fi
+
+      echo PROJECT_NUMBER=${PROJECT_NUMBER} >> ${ENV_FILE}
+
+      # Settig cluster version, while ensuring we still stick with kubernetes 'v1.10.x'
+      SERVER_CONFIG=$(gcloud --project=${PROJECT} container get-server-config --zone=${ZONE})
+      CLUSTER_VERSION=$(\
+          echo "${SERVER_CONFIG}" | \
+          awk '/validNodeVersions/{f=0} f; /validMasterVersions/{f=1}' | \
+          awk '{print $2}' | \
+          grep '^1.10.[0-9]*[-d]gke.[0-9]*$' | \
+          head -1)
+      if [[ ${CLUSTER_VERSION} == "" ]]; then
+          echo "Setting cluster version to ${MIN_CLUSTER_VERSION}"
+          CLUSTER_VERSION=${MIN_CLUSTER_VERSION}
+      fi
+      echo CLUSTER_VERSION=${CLUSTER_VERSION} >> ${ENV_FILE}
+>>>>>>> upstream/v0.3-branch
       ;;
     *)
       echo KUBEFLOW_PLATFORM=null >> ${ENV_FILE}
@@ -99,9 +153,92 @@ createEnv() {
 
 createNamespace() {
   set +e
+<<<<<<< HEAD
   O=$(kubectl get namespace ${K8S_NAMESPACE} 2>&1)
   RESULT=$?
   set -e
+=======
+  O=`kubectl get namespace ${K8S_NAMESPACE} 2>&1`
+  RESULT=$?
+  set -e
+
+  if [ "${RESULT}" -eq 0 ]; then
+    echo "namespace ${K8S_NAMESPACE} already exists"
+  else
+    kubectl create namespace ${K8S_NAMESPACE}
+  fi
+}
+
+if [ "${COMMAND}" == "init" ]; then
+	DEPLOYMENT_NAME=${WHAT}
+
+	while [ "$1" != "" ]; do
+    case $1 in
+    	--platform)                  shift
+                                     PLATFORM=$1
+                                     ;;
+        --project)                   shift
+                                     PROJECT=$1
+                                     ;;
+		--skipInitProject)           shift
+                                     SKIP_INIT_PROJECT=$1
+                                     ;;
+        --email)                     shift
+                                     EMAIL=$1
+                                     ;;
+      esac
+      shift
+	done
+
+	mkdir -p ${DEPLOYMENT_NAME}
+	# Most commands expect to be executed from the app directory
+	cd ${DEPLOYMENT_NAME}
+	createEnv
+	source ${ENV_FILE}
+	# TODO(jlewi): Should we default to directory name?
+	# TODO(jlewi): This doesn't work if user doesn't provide name we will end up
+	# interpreting parameters as the name. To fix this we need to check name doesn't start with --
+	if [ -z "${DEPLOYMENT_NAME}" ]; then
+  		echo "name must be provided"
+  		echo "usage: kfctl init <name>"
+  		exit 1
+	fi
+    if [ -d ${DEPLOYMENT_NAME} ]; then
+		echo Directory ${DEPLOYMENT_NAME} already exists
+		exit 1
+	fi
+
+	if [ -z "${PLATFORM}" ]; then
+  		echo "--platform must be provided"
+  		echo "usage: kfctl init <PLATFORM>"
+  		exit 1
+	fi
+	source "${ENV_FILE}"
+
+	# TODO(jlewi): How can we skip GCP project setup? Add a command line argument
+	# to skip it?
+	if [ "${PLATFORM}" == "gcp" ]; then
+	  if [ ! ${SKIP_INIT_PROJECT} ]; then
+	  	gcpInitProject
+	  fi
+	fi
+
+fi
+
+source ${ENV_FILE}
+
+if [ -z "${COMMAND}" ]; then
+  echo COMMAND must be provided
+  usage
+  exit 1
+fi
+
+if [ -z "${WHAT}" ]; then
+  echo WHAT must be provided
+  usage
+  exit 1
+fi
+>>>>>>> upstream/v0.3-branch
 
   if [ "${RESULT}" -eq 0 ]; then
     echo "namespace ${K8S_NAMESPACE} already exists"
@@ -119,7 +256,13 @@ customizeKsApp() {
 ksApply() {
   pushd ${KUBEFLOW_KS_DIR}
 
+<<<<<<< HEAD
   createNamespace
+=======
+  if [ "${PLATFORM}" == "minikube" ]; then
+    createNamespace
+  fi
+>>>>>>> upstream/v0.3-branch
 
   set +e
   O=$(ks env describe default 2>&1)
@@ -137,13 +280,20 @@ ksApply() {
   ks apply default -c jupyter
   ks apply default -c centraldashboard
   ks apply default -c tf-job-operator
+<<<<<<< HEAD
   ks apply default -c metacontroller
+=======
+>>>>>>> upstream/v0.3-branch
   ks apply default -c spartakus
   ks apply default -c argo
   ks apply default -c pipeline
 
   # Reduce resource demands locally
+<<<<<<< HEAD
   if [ "${PLATFORM}" != "minikube" ] && [ "${PLATFORM}" != "docker-for-desktop" ]; then
+=======
+  if [ "${PLATFORM}" != "minikube" ]; then
+>>>>>>> upstream/v0.3-branch
     ks apply default -c katib
   fi
 
@@ -286,6 +436,7 @@ main() {
     fi
     source "${ENV_FILE}"
 
+<<<<<<< HEAD
     # TODO(jlewi): How can we skip GCP project setup? Add a command line argument
     # to skip it?
     if [ "${PLATFORM}" == "gcp" ]; then
@@ -294,6 +445,15 @@ main() {
       else
         echo initializing project
         gcpInitProject
+=======
+    if [ "${PLATFORM}" == "minikube" ]; then
+      create_local_fs_mount_spec
+      if ${MOUNT_LOCAL}; then
+        ks param set jupyterhub disks "local-notebooks"
+        ks param set jupyterhub notebookUid `id -u`
+        ks param set jupyterhub notebookGid `id -g`
+        ks param set jupyterhub accessLocalFs true
+>>>>>>> upstream/v0.3-branch
       fi
     fi
   fi
@@ -306,11 +466,17 @@ main() {
     exit 1
   fi
 
+<<<<<<< HEAD
   if [ -z "${WHAT}" ]; then
     echo "WHAT must be provided"
     usage
     exit 1
   fi
+=======
+  if [ "${WHAT}" == "k8s"  ] || [ "${WHAT}" == "all" ]; then
+    createNamespace
+    ksApply
+>>>>>>> upstream/v0.3-branch
 
   # TODO(ankushagarwal): verify ks version is higher than 0.11.0
   check_install ks

@@ -300,6 +300,7 @@
           onExit: "exit-handler",
 
           templates: [
+<<<<<<< HEAD
                        {
                          name: "e2e",
                          dag: {
@@ -379,6 +380,159 @@
                        buildImageTemplate(version[0], version[1])
                        for version in supportedVersions
                      ],  // templates
+=======
+            {
+              name: "e2e",
+              dag: {
+                tasks: [
+                  {
+                    name: "checkout",
+                    template: "checkout",
+                  },
+                  {
+                    name: "build-1-4-1-gpu",
+                    template: "build-1-4-1-gpu",
+                    dependencies: ["checkout"],
+                  },
+                  {
+                    name: "build-1-4-1-cpu",
+                    template: "build-1-4-1-cpu",
+                    dependencies: ["checkout"],
+                  },
+                  {
+                    name: "build-1-5-1-gpu",
+                    template: "build-1-5-1-gpu",
+                    dependencies: ["checkout"],
+                  },
+                  {
+                    name: "build-1-5-1-cpu",
+                    template: "build-1-5-1-cpu",
+                    dependencies: ["checkout"],
+                  },
+                  {
+                    name: "build-1-6-0-gpu",
+                    template: "build-1-6-0-gpu",
+                    dependencies: ["checkout"],
+                  },
+                  {
+                    name: "build-1-6-0-cpu",
+                    template: "build-1-6-0-cpu",
+                    dependencies: ["checkout"],
+                  },
+                  {
+                    name: "build-1-7-0-gpu",
+                    template: "build-1-7-0-gpu",
+                    dependencies: ["checkout"],
+                  },
+                  {
+                    name: "build-1-7-0-cpu",
+                    template: "build-1-7-0-cpu",
+                    dependencies: ["checkout"],
+                  },
+                  {
+                    name: "build-1-8-0-gpu",
+                    template: "build-1-8-0-gpu",
+                    dependencies: ["checkout"],
+                  },
+                  {
+                    name: "build-1-8-0-cpu",
+                    template: "build-1-8-0-cpu",
+                    dependencies: ["checkout"],
+                  },
+                  {
+                    name: "build-1-9-0-gpu",
+                    template: "build-1-9-0-gpu",
+                    dependencies: ["checkout"],
+                  },
+                  {
+                    name: "build-1-9-0-cpu",
+                    template: "build-1-9-0-cpu",
+                    dependencies: ["checkout"],
+                  },
+                  {
+                    name: "build-1-10-1-gpu",
+                    template: "build-1-10-1-gpu",
+                    dependencies: ["checkout"],
+                  },
+                  {
+                    name: "build-1-10-1-cpu",
+                    template: "build-1-10-1-cpu",
+                    dependencies: ["checkout"],
+                  },
+                  {
+                    name: "create-pr-symlink",
+                    template: "create-pr-symlink",
+                    dependencies: ["checkout"],
+                  },
+                ],
+              },  //dag
+            },
+            buildImageTemplate("1.4.1", "1-4-1", "cpu"),
+            buildImageTemplate("1.4.1", "1-4-1", "gpu"),
+            buildImageTemplate("1.5.1", "1-5-1", "cpu"),
+            buildImageTemplate("1.5.1", "1-5-1", "gpu"),
+            buildImageTemplate("1.6.0", "1-6-0", "cpu"),
+            buildImageTemplate("1.6.0", "1-6-0", "gpu"),
+            buildImageTemplate("1.7.0", "1-7-0", "cpu"),
+            buildImageTemplate("1.7.0", "1-7-0", "gpu"),
+            buildImageTemplate("1.8.0", "1-8-0", "cpu"),
+            buildImageTemplate("1.8.0", "1-8-0", "gpu"),
+            buildImageTemplate("1.9.0", "1-9-0", "cpu"),
+            buildImageTemplate("1.9.0", "1-9-0", "gpu"),
+            buildImageTemplate("1.10.1", "1-10-1", "cpu"),
+            buildImageTemplate("1.10.1", "1-10-1", "gpu"),
+            {
+              name: "exit-handler",
+              steps: [
+                [{
+                  name: "copy-artifacts",
+                  template: "copy-artifacts",
+                }],
+              ],
+            },
+            {
+              name: "checkout",
+              container: {
+                command: [
+                  "/usr/local/bin/checkout.sh",
+                ],
+                args: [
+                  srcRootDir,
+                ],
+                env: prow_env + [{
+                  name: "EXTRA_REPOS",
+                  value: "kubeflow/testing@HEAD",
+                }],
+                image: params.step_image,
+                volumeMounts: [
+                  {
+                    name: dataVolume,
+                    mountPath: mountPath,
+                  },
+                ],
+              },
+            },  // checkout
+            buildTemplate("create-pr-symlink", [
+              "python",
+              "-m",
+              "kubeflow.testing.prow_artifacts",
+              "--artifacts_dir=" + outputDir,
+              "create_pr_symlink",
+              "--bucket=" + bucket,
+            ]),  // create-pr-symlink
+            buildTemplate(
+              "copy-artifacts",
+              [
+                "python",
+                "-m",
+                "kubeflow.testing.prow_artifacts",
+                "--artifacts_dir=" + outputDir,
+                "copy_artifacts",
+                "--bucket=" + bucket,
+              ]
+            ),  // copy-artifacts
+          ],  // templates
+>>>>>>> upstream/v0.3-branch
         },
       },  // e2e
   },  // parts

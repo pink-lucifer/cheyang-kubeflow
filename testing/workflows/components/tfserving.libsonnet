@@ -87,12 +87,20 @@
         modelName: "mnist",
         namespace: stepsNamespace,
         modelPath: "gs://kubeflow-examples-data/mnist",
+<<<<<<< HEAD
+=======
+        deployHttpProxy: true,
+>>>>>>> upstream/v0.3-branch
       };
       local deployGpuParams = {
         name: "mnist-gpu",
         modelName: "mnist",
         namespace: stepsNamespace,
         modelPath: "gs://kubeflow-examples-data/mnist",
+<<<<<<< HEAD
+=======
+        deployHttpProxy: true,
+>>>>>>> upstream/v0.3-branch
         numGpus: 1,
       };
 

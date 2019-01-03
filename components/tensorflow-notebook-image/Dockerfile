@@ -7,9 +7,12 @@ FROM $BASE_IMAGE
 
 ARG TF_PACKAGE=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.7.0-cp36-cp36m-linux_x86_64.whl
 ARG TF_PACKAGE_PY_27=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.7.0-cp27-none-linux_x86_64.whl
+<<<<<<< HEAD
 ARG TF_SERVING_VERSION=0.0.0
 ARG TFMA_VERSION
 ARG TFDV_VERSION
+=======
+>>>>>>> upstream/v0.3-branch
 ARG PIPELINE_SDK_PACKAGE=https://storage.googleapis.com/ml-pipeline/release/0.1.3/kfp.tar.gz
 
 USER root
@@ -23,6 +26,7 @@ ENV HOME /home/$NB_USER
 # to minimize the amount of content in $HOME
 ENV CONDA_DIR=/opt/conda
 ENV PATH $CONDA_DIR/bin:$PATH
+ENV PIPELINE_SDK_PACKAGE $PIPELINE_SDK_PACKAGE
 
 # Export args as environment variables.
 # This is solely to make them available to install.sh
@@ -121,7 +125,10 @@ RUN pip install --upgrade pip && \
     jupyter-console==6.0.0 \
     jupyterhub \
     jupyterlab \
+<<<<<<< HEAD
     git+https://github.com/kubeflow/fairing@8087c0b4e4ae5007b7a21177047e8b8412be382e \
+=======
+>>>>>>> upstream/v0.3-branch
     # Kubeflow pipeline SDK
     ${PIPELINE_SDK_PACKAGE} \
     # Cleanup
@@ -132,9 +139,48 @@ COPY --chown=jovyan:users requirements.txt /tmp
 
 # Install python2 and ipython2 kernel for jupyter notebook
 # Install tf packages which only support py2
+<<<<<<< HEAD
 COPY --chown=jovyan:users install.sh /tmp/
 RUN chmod a+rx /tmp/install.sh && \
     /tmp/install.sh
+=======
+RUN conda create -n py2 python=2 && \
+    source activate py2 && \
+    pip install --upgrade pip && \
+    pip --no-cache-dir install \
+    ipykernel \
+    # Tensorflow
+    ${TF_PACKAGE_PY_27} \
+    # Tensorflow packages which only supports python 2
+    tensorflow-transform \
+    tensorflow-serving-api \
+    # ipykernel for python 2 jupyter notebook kernel
+    && \
+    python -m ipykernel install && \
+    # tensorflow-model-analysis is only supported for TF 1.6 and above
+    if [[ $INSTALL_TFMA == "yes" ]]; then \
+      pip install --no-cache-dir tensorflow-model-analysis && \
+      pip install --no-cache-dir tensorflow-data-validation && \
+      # We use --system because if we don't the config is written to the home directory
+      # and the changes are lost when we mount a PV over them.
+      jupyter nbextension enable --py --system widgetsnbextension && \
+      jupyter nbextension install --py --system --symlink tensorflow_model_analysis && \
+      jupyter nbextension enable --py --system tensorflow_model_analysis ; \
+    fi \
+    && \
+    # Install jupyterlab-manager
+    conda install --quiet --yes \
+    # nodejs required for jupyterlab-manager
+    nodejs && \
+    jupyter labextension install @jupyter-widgets/jupyterlab-manager && \
+    # Install common packages from requirements.txt for both python2 and python3
+    pip --no-cache-dir install -r /tmp/requirements.txt && \
+    source activate py2 && \
+    pip --no-cache-dir install -r /tmp/requirements.txt && \
+    # Do chown in this layer for significant size savings
+    chown -R ${NB_USER}:users $HOME && \
+    chown -R ${NB_USER}:users $CONDA_DIR
+>>>>>>> upstream/v0.3-branch
 
 # Add basic config
 COPY --chown=jovyan:users  jupyter_notebook_config.py /tmp

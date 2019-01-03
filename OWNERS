@@ -6,7 +6,15 @@ approvers:
   - kunmingg
   - lluunn
   - pdmack
+<<<<<<< HEAD
   - r2d4
+=======
+  - richardsliu
+  - ScorpioCPH
+  - texasmichelle
+  - willb
+reviewers:  
+>>>>>>> upstream/v0.3-branch
   - richardsliu
   - texasmichelle
 reviewers:
